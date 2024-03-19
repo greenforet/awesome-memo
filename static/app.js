@@ -1,7 +1,32 @@
+
+async function editMemo(event){
+    const id = event.target.dataset.id;
+    const editInput = prompt("수정할 값을 입력하세요.");
+    const red = await fetch(`/memo/${id}`,{
+        method:"PUT",
+        headers:{
+            "Content-Type":"application/json",
+        },
+        body: JSON.stringify({
+          id,
+          content:editInput,
+        }),
+    });
+}
+
+
 function displayMemo(memos){
     const ul = document.querySelector("#memo-ul");
+
     const li = document.createElement("li");
     li.innerText = `[id:${memo.id}] ${memo.content}`;
+
+    const editBtn = document.createElement("button");
+    editBtn.innerText = "수정하기";
+    editBtn.addEventListener("click", editMemo);
+    editBtn.dataset.id = memo.id;
+
+    li.appendChild(editBtn);
     ul.appendChild(li);
 }
 
@@ -15,7 +40,7 @@ async function readMemo(){
 }
 
 async function createMemo(value){
-    const res = await fetch("/memos",{
+    const res = await fetch("/memos", {
         method:"POST",
         headers:{
             "Content-Type":"application/json",
